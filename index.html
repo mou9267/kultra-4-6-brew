@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>四六沖泡法 × 1Z K Ultra｜20g / 30g / 40g 參數卡</title>
+<style>
+:root{
+  --paper:#F2F3EF; --card:#FFFFFF; --ink:#2B221D; --muted:#6E645D; --line:#D9D6CF;
+  --front:#B8862A; --back:#2E6A87; --warn:#9C3D2E; --ok:#3F7A4A;
+  --shadow:0 1px 0 rgba(43,34,29,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --paper:#1B1715; --card:#25201D; --ink:#EDE6DF; --muted:#A99E95; --line:#3D3530;
+    --front:#D6A445; --back:#5FA3C4; --warn:#D9725F; --ok:#78B386; }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+  font-size:1rem; line-height:1.6; font-variant-numeric:tabular-nums;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
+}
+main{max-width:760px; margin:0 auto; padding:20px 16px 120px}
+h1{font-size:1.55rem; line-height:1.3; margin:8px 0 4px; letter-spacing:.02em}
+.sub{color:var(--muted); margin:0 0 20px; font-size:.95rem}
+h2{font-size:1.1rem; margin:28px 0 10px}
+.picker{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+.picker button{
+  flex:1 1 0; min-width:90px; padding:12px 8px; border:1.5px solid var(--line);
+  background:var(--card); color:var(--ink); border-radius:10px; font:inherit; cursor:pointer;
+}
+.picker button .big{display:block; font-size:1.4rem; font-weight:700}
+.picker button .tag{font-size:.78rem; color:var(--muted)}
+.picker button[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--paper)}
+.picker button[aria-pressed="true"] .tag{color:var(--paper); opacity:.8}
+.picker.small button{padding:8px; font-size:.95rem}
+button:focus-visible{outline:3px solid var(--back); outline-offset:2px}
+
+/* Grind dial: the one memorable element */
+.dial{
+  display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:var(--shadow)
+}
+.dial-num{font-size:3.2rem; font-weight:800; line-height:1; letter-spacing:.04em}
+.dial-meta{font-size:.95rem; color:var(--muted)}
+.dial-meta b{color:var(--ink)}
+.status{display:inline-block; font-size:.8rem; padding:2px 8px; border-radius:99px; border:1px solid currentColor; margin-top:6px}
+.s-ok{color:var(--ok)} .s-pend{color:var(--front)} .s-ext{color:var(--warn)}
+
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:12px}
+.facts div{background:var(--card); padding:10px 12px}
+.facts span{display:block; font-size:.8rem; color:var(--muted)}
+.facts b{font-size:1.05rem}
+
+/* Timeline */
+.timeline{position:relative; height:74px; margin:8px 0 4px; background:var(--card);
+  border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.pour{position:absolute; bottom:22px; border-radius:4px 4px 0 0; display:flex; align-items:flex-start; justify-content:center;
+  font-size:.72rem; color:#fff; padding-top:2px}
+.pour.f{background:var(--front)} .pour.b{background:var(--back)}
+.axis{position:absolute; left:0; right:0; bottom:0; height:22px; border-top:1px solid var(--line); font-size:.72rem; color:var(--muted)}
+.axis i{position:absolute; top:3px; transform:translateX(-50%); font-style:normal}
+.now{position:absolute; top:0; bottom:0; width:2px; background:var(--warn); left:0; display:none}
+.legend{font-size:.82rem; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; vertical-align:middle}
+
+.tbl-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:460px}
+th,td{padding:9px 10px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:.82rem; color:var(--muted); font-weight:600}
+tr:last-child td{border-bottom:none}
+tr.active td{background:rgba(46,106,135,.16)}
+@supports (background:color-mix(in srgb, red 50%, transparent)){
+  tr.active td{background:color-mix(in srgb, var(--back) 16%, transparent)}
+}
+.phase{font-size:.78rem; color:var(--muted)}
+.resume{display:flex; gap:10px; align-items:center; flex-wrap:wrap; background:var(--card);
+  border:1.5px solid var(--front); border-radius:12px; padding:10px 14px; margin:0 0 12px; font-size:.92rem}
+.resume button{font:inherit; padding:8px 14px; border-radius:8px; cursor:pointer; border:1.5px solid var(--ink)}
+.resume .keep{background:var(--ink); color:var(--paper)}
+.resume .drop{background:transparent; color:var(--ink)}
+.picker.locked button{opacity:.55}
+
+/* Timer */
+.timer{display:flex; align-items:center; gap:14px; flex-wrap:wrap; background:var(--card);
+  border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-top:14px}
+.clock{font-size:2.4rem; font-weight:800; min-width:5ch}
+.next{flex:1 1 180px; font-size:.95rem}
+.next b{font-size:1.1rem}
+.timer button{font:inherit; padding:10px 18px; border-radius:10px; border:1.5px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer}
+.timer button.ghost{background:transparent; color:var(--ink)}
+
+.notes{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:4px 16px}
+.notes ul{padding-left:18px; margin:10px 0}
+.notes li{margin:6px 0}
+.cmp .tbl-wrap table{min-width:560px}
+footer{margin-top:32px; font-size:.82rem; color:var(--muted)}
+footer a{color:var(--back)}
+.mark{flex:1 1 100%; font-size:1.25rem !important; padding:16px !important; font-weight:700; background:var(--back) !important; border-color:var(--back) !important}
+.mark:disabled{opacity:.4; cursor:not-allowed}
+.lead{font-size:.9rem; color:var(--muted)}
+.lead input{width:3.5em; font:inherit; padding:4px 6px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--ink); text-align:center}
+#logBox{display:none}
+.summary{margin:10px 0 0; font-size:.95rem}
+.summary b{color:var(--back)}
+.calc{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px}
+.calc label{font-size:.82rem; color:var(--muted); display:flex; flex-direction:column; gap:4px}
+.calc input{font:inherit; font-size:1.1rem; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink); width:100%}
+.calc .wide{grid-column:1/-1}
+.good{color:var(--ok)} .bad{color:var(--warn)}
+/* 固定字體大小控制鈕（使用 px，不隨字級縮放） */
+.fs{position:fixed; z-index:70; right:calc(12px + env(safe-area-inset-right,0px)); bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  display:flex; flex-direction:column; align-items:center; gap:6px; padding:6px;
+  background:var(--card); border:1px solid var(--line); border-radius:40px; box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.fs button{width:52px; height:52px; border-radius:50%; border:1.5px solid var(--ink); background:var(--ink); color:var(--paper);
+  font:700 20px/1 "Noto Sans TC","Microsoft JhengHei",sans-serif; cursor:pointer; padding:0}
+.fs button.minus{background:transparent; color:var(--ink); font-size:16px}
+.fs button:disabled{opacity:.35; cursor:not-allowed}
+.fs output{font:600 13px/1 "Noto Sans TC","Microsoft JhengHei",sans-serif; color:var(--muted); min-width:36px; text-align:center}
+@media print{.fs{display:none}}
+/* 計時器置頂 */
+#mainTimer.sticky{position:sticky; top:env(safe-area-inset-top,0px); z-index:40; box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#mainTimer.sticky .clock{font-size:2rem}
+[hidden]{display:none !important}
+/* 沖煮模式 */
+.brew{position:fixed; inset:0; z-index:60; background:var(--paper); color:var(--ink); display:flex; flex-direction:column;
+  align-items:center; justify-content:space-between; text-align:center;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.b-top{width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:.9rem; color:var(--muted)}
+.b-clock{font-size:min(4.5rem,22vw); font-weight:800; line-height:1}
+.b-pour{font-size:1.6rem; font-weight:700}
+.b-pour small{display:block; margin-top:6px; font-size:min(1.6rem,7vw); font-weight:700; color:var(--ink); opacity:.85}
+.b-target span{display:block; font-size:1rem; color:var(--muted)}
+.b-target b{font-size:min(6rem,30vw); line-height:1; color:var(--back); transition:color .3s}
+.b-target.f b{color:var(--front)}
+.b-phase{display:inline-block; width:.7em; height:.7em; border-radius:50%; margin-right:.35em; vertical-align:.05em; background:var(--back)}
+.b-phase.f{background:var(--front)}
+@media (prefers-reduced-motion:reduce){.b-target b{transition:none}}
+.b-target small{font-size:1.6rem; margin-left:4px}
+.b-sub{font-size:min(2.2rem,9vw); font-weight:800; line-height:1.3; min-height:2.8em; display:flex; align-items:center; justify-content:center}
+.b-sub.pending{color:var(--front); font-weight:700}
+.b-actions{width:100%; display:flex; gap:10px}
+.b-actions button,.b-top button{font:inherit; border-radius:12px; cursor:pointer}
+.b-ghost{padding:10px 16px; border:1.5px solid var(--ink); background:transparent; color:var(--ink)}
+.b-mark{flex:1; padding:22px 10px; font-size:1.4rem; font-weight:700; border:none; background:var(--back); color:#fff}
+.b-mark:disabled{opacity:.4}
+.b-wake{font-size:.8rem; color:var(--muted)}
+body.brewing{overflow:hidden}
+body.brewing .fs{display:none}
+.b-font{display:flex; gap:6px; align-items:center}
+.b-font button{padding:8px 12px; font-size:.9rem}
+@media (max-width:480px){ .dial{grid-template-columns:1fr} .dial-num{font-size:2.8rem} }
+@media print{ .timer,.picker{display:none} body{background:#fff} }
+</style>
+</head>
+<body>
+<main>
+  <h1>四六沖泡法 × 1Z K Ultra</h1>
+  <p class="sub">V60 NEO 02｜失重12.7%｜93°C 起始｜水粉比 1:15｜五段注水（前 40% 兩注、後 60% 三注）</p>
+
+  <div class="resume" id="resumeBar" hidden>
+    <span id="resumeText">偵測到上次未完成的沖煮紀錄。</span>
+    <button id="resumeKeep" class="keep">還原上次紀錄</button>
+    <button id="resumeDrop" class="drop">捨棄紀錄</button>
+  </div>
+
+  <div class="picker" role="group" aria-label="粉量">
+    <button data-dose="20" aria-pressed="true"><span class="big">20g</span><span class="tag">已驗證錨點</span></button>
+    <button data-dose="30" aria-pressed="false"><span class="big">30g</span><span class="tag">待驗證</span></button>
+    <button data-dose="40" aria-pressed="false"><span class="big">40g</span><span class="tag">推算值</span></button>
+  </div>
+  <div class="picker small" role="group" aria-label="前段風味">
+    <button data-taste="bal" aria-pressed="true">平衡（前兩注等量）</button>
+    <button data-taste="sweet" aria-pressed="false">偏甜（第一注 42%）</button>
+  </div>
+
+  <h2>研磨刻度</h2>
+  <div class="dial">
+    <div class="dial-num" id="grind">0.7.4</div>
+    <div class="dial-meta">
+      <div>刀盤間距 <b id="gap">1.48 mm</b>　建議範圍 <b id="range">—</b></div>
+      <div>粉床深度比 <b id="depth">1.00</b>（相對 20g）</div>
+      <span class="status" id="status">已驗證</span>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div><span>總注水量</span><b id="water">300 g</b></div>
+    <div><span>每注水量（平衡版）</span><b id="per">60 g</b></div>
+    <div><span>注水間隔</span><b id="interval">45 秒</b></div>
+    <div><span>預期總時間</span><b id="total">約 3:45</b></div>
+    <div><span>預期吸水量</span><b id="absorb">—</b></div>
+    <div><span>預期出液／出杯比</span><b id="out">—</b></div>
+  </div>
+
+  <h2>注水時間軸</h2>
+  <div class="timeline" id="timeline"><div class="now" id="now"></div><div class="axis" id="axis"></div></div>
+  <div class="legend"><span><i style="background:var(--front)"></i>前 40%：調酸甜</span><span><i style="background:var(--back)"></i>後 60%：調濃度</span></div>
+
+  <h2>注水表</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>注次</th><th>開始時間</th><th>本注水量</th><th>累計水量</th><th>秤上目標</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <h2>計時模式</h2>
+  <div class="picker small" role="group" aria-label="計時模式">
+    <button data-mode="auto" aria-pressed="false">固定間隔</button>
+    <button data-mode="manual" aria-pressed="true">拐點觸發</button>
+  </div>
+  <p class="lead" id="modeHint">看到流速明顯變慢時按「標記拐點」，<label>延遲 <input id="lead" type="number" min="0" max="15" value="5"> 秒</label>後提示注下一注。</p>
+
+  <div class="timer" id="mainTimer" aria-live="polite">
+    <div class="clock" id="clock">0:00</div>
+    <div class="next" id="next">按「開始」後，第 1 注立即開始</div>
+    <button id="startBtn">開始</button>
+    <button id="resetBtn" class="ghost">重設</button>
+    <button id="brewBtn" class="ghost">沖煮模式</button>
+    <button id="markBtn" class="mark" disabled>標記拐點</button>
+    <span class="lead" id="wakeMsg" style="flex-basis:100%">螢幕常亮：未啟用（按「開始」後自動啟用）</span>
+    <span class="lead" style="flex-basis:100%">手機重整頁面（網址列 ↻ 或頁面頂端下拉）後，標題下方會出現「還原上次紀錄」橫幅。</span>
+    <span class="lead" style="flex-basis:100%"><label><input type="checkbox" id="soundTgl" checked> 音效</label>　<label><input type="checkbox" id="vibTgl" checked> 震動</label></span>
+  </div>
+
+  <div id="logBox">
+    <h2>本次拐點紀錄</h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>注次</th><th>計畫開始</th><th>實際開始</th><th>拐點（注後）</th><th>本注時長</th></tr></thead>
+      <tbody id="logRows"></tbody>
+    </table></div>
+    <p class="summary" id="summary"></p>
+  </div>
+
+  <h2>出液與杯比</h2>
+  <div class="calc">
+    <label>實際粉量 (g)<input id="inDose" type="number" inputmode="decimal" step="0.1"></label>
+    <label>總注水量 (g)<input id="inWater" type="number" inputmode="decimal" step="0.1"></label>
+    <label>出液重量 (g)<input id="inOut" type="number" inputmode="decimal" step="0.1" placeholder="沖完秤重"></label>
+    <label class="wide">風味筆記<input id="inTaste" type="text" placeholder="例：熱時酸甜平衡、濃郁，放涼花香明顯"></label>
+  </div>
+  <div class="facts">
+    <div><span>入水比</span><b id="rIn">—</b></div>
+    <div><span>出杯比</span><b id="rOut">—</b></div>
+    <div><span>吸水量</span><b id="rAbs">—</b></div>
+    <div><span>吸水率</span><b id="rRate">—</b></div>
+  </div>
+  <p class="summary" id="ratioJudge">輸入出液重量後自動計算。</p>
+  <div class="timer" style="margin-top:8px"><button id="copyBtn" class="ghost">複製紀錄（Markdown）</button><button id="copyManualBtn" class="ghost" hidden>手動複製</button><span class="lead" id="copyMsg"></span></div>
+  <div id="copyFallback" hidden><textarea id="copyArea" rows="8" readonly style="width:100%; font:inherit; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink)"></textarea><p class="lead">自動複製失敗，請全選上方文字後按 Ctrl+C。</p></div>
+
+  <h2>本粉量注意事項</h2>
+  <div class="notes"><ul id="notes"></ul></div>
+
+  <h2>通用原則</h2>
+  <div class="notes"><ul>
+    <li>間隔時間只是起點：觀察流速明顯變慢的拐點，約 5 秒後注下一注，比固定秒數更可靠。</li>
+    <li>前 40% 比例與粉量無關（無因次），粉量放大時只要等比放大水量，酸甜傾向不變。</li>
+    <li>第一注水量越少越甜、越多越酸；後 60% 拆越多注越濃，合併注數則較淡。</li>
+    <li>單一變因：粉量改變會連帶改變粉床深度、每注水量與排水時間，實驗時一次只再多動一個參數。</li>
+    <li>吸水率以 K Ultra 實測 2.39–2.49 g/g 估算；出杯比若明顯偏離 1:12.5–12.7，代表粉床保水行為已改變。</li>
+  </ul></div>
+
+  <div class="cmp">
+    <h2>三種粉量對照</h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>項目</th><th>20g</th><th>30g</th><th>40g</th></tr></thead>
+      <tbody id="cmpRows">
+      </tbody>
+    </table></div>
+  </div>
+
+  <footer>
+    <p>計算依據：K Ultra 每 click 0.02 mm；錐形濾杯粉床深度 ∝ 粉重<sup>1/3</sup>；Kozeny-Carman 滲透率 k ∝ d²，以調粗研磨補償深度增加的流阻。20g 錨點來自 9/21、9/22 實測（Ethiopian natural G1，焙失 12.7%）。</p>
+    <p>參考：<a href="https://hario.co.uk/blogs/hario-ambassadors/hario-v60-recipe-interview-with-hario-ambassador-tetsu-kasuya">粕谷哲 4:6 method（Hario）</a>｜<a href="https://www.scottrao.com/blog/2025/11/11/bed-depth-why-it-matters">Scott Rao：Bed depth</a>｜<a href="https://research.birmingham.ac.uk/files/18167003/Corrochano_et_al_New_methodology_estimate_Journal_Food_Engineering_2015.pdf">Corrochano et al. 2015，咖啡粉床滲透率</a></p>
+  </footer>
+</main>
+
+<div class="brew" id="brew" hidden>
+  <div class="b-top"><span id="bInfo"></span><span class="b-font"><button id="bFsUp" class="b-ghost" aria-label="放大字體">A+</button><button id="bFsDown" class="b-ghost" aria-label="縮小字體">A−</button></span><button id="bExit" class="b-ghost">離開 (Esc)</button></div>
+  <div class="b-clock" id="bClock">0:00</div>
+  <div class="b-pour" id="bPour">第 1 注</div>
+  <div class="b-target"><span>秤上目標</span><b id="bTarget">60</b><small>g</small></div>
+  <div class="b-sub" id="bSub" aria-live="polite">按「開始」後，第 1 注立即開始</div>
+  <div class="b-actions"><button id="bStart" class="b-ghost">開始</button><button id="bMark" class="b-mark" disabled>標記拐點</button></div>
+  <div class="b-wake" id="bWake"></div>
+</div>
+<div class="fs" role="group" aria-label="字體大小">
+  <button id="fsUp" aria-label="放大字體">A+</button>
+  <output id="fsVal" aria-live="polite">100%</output>
+  <button id="fsDown" class="minus" aria-label="縮小字體">A−</button>
+</div>
+<script>
+const DATA = {
+  20:{grind:"0.7.4", gap:"1.48 mm", range:"0.7.3–0.7.5", depth:"1.00", status:["已驗證（9/21、9/22 重現）","s-ok"],
+      water:300, interval:45, total:"約 3:45", totalSec:225, absorb:"48–50 g", out:"約 256 g／1:12.6–12.7", inflect:[35,40], ratio:[12.6,12.7],
+      notes:["這是目前的已驗證錨點，所有推算都以此為基準。","實測流速拐點約在每注後 35 秒、40 秒，45 秒間隔可讓粉床排乾。","若風味偏淡，先以 1 click 為單位調細（0.7.5→0.7.4 已證實有效）。"]},
+  30:{grind:"0.7.8", gap:"1.56 mm", range:"0.7.8–0.7.9", depth:"1.14", status:["待驗證","s-pend"],
+      water:450, interval:55, total:"約 4:30", totalSec:270, absorb:"72–75 g", out:"約 375–378 g／1:12.5–12.7", inflect:[45,55], ratio:[12.5,12.7],
+      notes:["V60 的粉量甜蜜區約 20–25g，30g 已在邊緣，注意濾紙貼合與溢粉。","90g 一注的排水時間約為 20g 時的 1.3–1.4 倍，拐點預估落在 45–55 秒。","若總時間超過 4:30 且偏苦澀，再調粗 1 click。","建議先完成此粉量實測，用實際數據校正刻度斜率，再推 40g。"]},
+  40:{grind:"0.8.3", gap:"1.66 mm", range:"0.8.2–0.8.4", depth:"1.25", status:["推算值（依 30g 推算，尚未驗證）","s-ext"],
+      water:600, interval:70, total:"約 5:30–6:00", totalSec:350, absorb:"96–100 g", out:"約 500–504 g／1:12.5–12.6", inflect:[56,72], ratio:[12.5,12.6],
+      notes:["錐尖通量集中：粉床越深，錐尖粉萃取過度、上緣粉萃取不足的落差越大，無法只靠調粗補償。","熱質量較大，漿體平均溫度偏高；若偏苦，優先把起始水溫降到 91–92°C。","Kalita 900 需裝約 650g 以上的水，滿壺時注意第一注流量控制。","每注 120g 易接近濾杯上緣，可分 2–3 個小脈衝完成，但做法需固定。","替代方案：分兩個濾杯各沖 20g，直接套用已驗證錨點，品質通常更穩定。"]}
+};
+let dose=20, taste="bal", mode="manual";
+let timerId=null, t0=0, elapsed=0, running=false;
+let cur=1, starts=[], inflect=[], due=null, endTime=null, lastBeep=0;
+let soundOn=true, vibrateOn=true, lastSave=0, lastFocus=null, lastAnnounced="";
+const $=id=>document.getElementById(id);
+const fmt=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+const clampLead=v=>{ v=Math.round(+v); if(!isFinite(v)) return 5; return Math.min(15,Math.max(0,v)); };
+const lead=()=>clampLead($("lead").value);
+$("lead").addEventListener("change",()=>{ $("lead").value=clampLead($("lead").value); saveSession(); });
+const SESSION_KEY="brew46.session.v1";
+const isBrewing=()=>running || elapsed>0;
+function confirmSwitch(){
+  if(!isBrewing()) return true;
+  return confirm("沖煮進行中，切換參數會重設計時與拐點紀錄，確定繼續？");
+}
+
+let ac=null;
+function unlockAudio(){
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended") ac.resume();
+  }catch(e){}
+}
+function beep(){
+  if(!soundOn && !vibrateOn) return;
+  if(vibrateOn && navigator.vibrate){ try{ navigator.vibrate([150,80,150]); }catch(e){} }
+  if(!soundOn) return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==="suspended") ac.resume();
+    const o=ac.createOscillator(), g=ac.createGain();
+    o.frequency.value=880; g.gain.value=0.15; o.connect(g); g.connect(ac.destination);
+    o.start(); o.stop(ac.currentTime+0.25);
+  }catch(e){}
+}
+
+function snapshotSession(){
+  return {v:1, savedAt:Date.now(), dose, taste, mode, lead:lead(),
+    elapsed:Math.round(elapsed*10)/10, running, cur,
+    starts, inflect, due, endTime, lastBeep,
+    inDose:$("inDose").value, inWater:$("inWater").value,
+    inOut:$("inOut").value, inTaste:$("inTaste").value,
+    soundOn, vibrateOn};
+}
+function saveSession(force){
+  const now=Date.now();
+  if(!force && now-lastSave<1500) return;
+  lastSave=now;
+  try{
+    if(!isBrewing() && endTime==null){ localStorage.removeItem(SESSION_KEY); return; }
+    localStorage.setItem(SESSION_KEY, JSON.stringify(snapshotSession()));
+  }catch(e){}
+}
+function applySession(s){
+  dose=s.dose; taste=s.taste; mode=s.mode;
+  elapsed=+s.elapsed||0; cur=s.cur||1;
+  starts=Array.isArray(s.starts)?s.starts:[];
+  inflect=Array.isArray(s.inflect)?s.inflect:[];
+  due=(s.due==null?null:+s.due); endTime=(s.endTime==null?null:+s.endTime);
+  lastBeep=s.lastBeep||0;
+  if(typeof s.soundOn==="boolean") soundOn=s.soundOn;
+  if(typeof s.vibrateOn==="boolean") vibrateOn=s.vibrateOn;
+  syncPickers(); render({keepInputs:true, skipReset:true});
+  $("lead").value=clampLead(s.lead);
+  $("inDose").value=s.inDose??dose; $("inWater").value=s.inWater??DATA[dose].water;
+  $("inOut").value=s.inOut??""; $("inTaste").value=s.inTaste??"";
+  calcRatio(); renderLog(); paintTimerIdle(); syncBrew(); syncSoundUI(); saveSession(true);
+}
+function loadSession(){
+  let s=null;
+  try{ s=JSON.parse(localStorage.getItem(SESSION_KEY)); }catch(e){ s=null; }
+  if(!s || s.v!==1) return null;
+  if(!(s.elapsed>0 || (Array.isArray(s.starts)&&s.starts[1]!=null) || s.endTime!=null)) return null;
+  return s;
+}
+function clearSession(){ try{ localStorage.removeItem(SESSION_KEY); }catch(e){} }
+
+function pours(){
+  const d=DATA[dose], w=d.water, front=w*0.4, back=w*0.6;
+  const first = taste==="sweet" ? Math.round(front*0.42) : front/2;
+  const vols=[first, front-first, back/3, back/3, back/3];
+  let cum=0;
+  return vols.map((v,i)=>{cum+=v; return {i:i+1, start:i*d.interval, vol:Math.round(v), cum:Math.round(cum), phase:i<2?"f":"b"};});
+}
+
+function syncPickers(){
+  document.querySelectorAll("[data-dose]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.dose===dose));
+  document.querySelectorAll("[data-taste]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.taste===taste));
+  document.querySelectorAll("[data-mode]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.mode===mode));
+}
+function lockPickers(){
+  const lock=isBrewing();
+  document.querySelectorAll(".picker").forEach(p=>p.classList.toggle("locked",lock));
+}
+function setText(el,txt){ el.textContent=txt; }
+function render(opts){
+  opts=opts||{};
+  const d=DATA[dose], p=pours();
+  setText($("grind"),d.grind); setText($("gap"),d.gap); setText($("range"),d.range); setText($("depth"),d.depth);
+  const st=$("status"); setText(st,d.status[0]); st.className="status "+d.status[1];
+  setText($("water"),d.water+" g"); setText($("per"),(d.water/5)+" g");
+  setText($("interval"),d.interval+" 秒（依拐點微調）"); setText($("total"),d.total);
+  setText($("absorb"),d.absorb); setText($("out"),d.out);
+  const tb=$("rows"); tb.textContent="";
+  p.forEach(x=>{
+    const tr=document.createElement("tr"); tr.dataset.i=x.i;
+    const c1=document.createElement("td"); c1.textContent=`第 ${x.i} 注 `;
+    const ph=document.createElement("span"); ph.className="phase"; ph.textContent=x.phase==="f"?"前 40%":"後 60%";
+    c1.appendChild(ph); tr.appendChild(c1);
+    [fmt(x.start),x.vol+" g",x.cum+" g",x.cum+" g"].forEach(t=>{ const td=document.createElement("td"); td.textContent=t; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+  const ul=$("notes"); ul.textContent="";
+  d.notes.forEach(n=>{ const li=document.createElement("li"); li.textContent=n; ul.appendChild(li); });
+  const tl=$("timeline"); tl.querySelectorAll(".pour").forEach(e=>e.remove());
+  const T=d.totalSec, maxV=Math.max(...p.map(x=>x.vol));
+  p.forEach(x=>{
+    const el=document.createElement("div"); el.className="pour "+x.phase;
+    el.style.left=(x.start/T*100)+"%"; el.style.width=Math.max(4,(12/T*100))+"%";
+    el.style.height=(18+x.vol/maxV*30)+"px"; el.textContent=x.vol;
+    tl.appendChild(el);
+  });
+  const ticks=[]; for(let s=0;s<=T;s+=60) ticks.push(s);
+  $("axis").innerHTML=ticks.map(s=>`<i style="left:${Math.min(97,Math.max(3,s/T*100))}%">${fmt(s)}</i>`).join("");
+  if(!opts.keepInputs){ $("inDose").value=dose; $("inWater").value=d.water; $("inOut").value=""; }
+  calcRatio();
+  $("modeHint").style.display = mode==="manual" ? "block" : "none";
+  $("markBtn").style.display = mode==="manual" ? "block" : "none";
+  renderCmp();
+  lockPickers();
+  if(!opts.skipReset) reset(opts.clear===false?false:true);
+  else { paintTimerIdle(); }
+}
+function paintTimerIdle(){
+  stopTimer();
+  $("clock").textContent=fmt(elapsed);
+  $("startBtn").textContent=running?"暫停":(elapsed>0?"繼續":"開始");
+  $("startBtn").disabled=(endTime!=null);
+  $("markBtn").disabled=!(running||elapsed>0)||endTime!=null;
+  if(endTime!=null){ $("next").innerHTML=`完成，總時間 <b>${fmt(endTime)}</b>`; }
+  else if(elapsed===0){ $("next").textContent="按「開始」後，第 1 注立即開始"; $("now").style.display="none"; }
+  else { tick(true); stopTimer(); }
+  if(window.afterReset) afterReset();
+  lockPickers();
+}
+function renderCmp(){
+  const body=$("cmpRows"); if(!body) return; body.textContent="";
+  const doses=[20,30,40];
+  const shortStatus={20:"已驗證",30:"待驗證",40:"推算"};
+  const bal=d=>{ const w=DATA[d].water*0.4/2; return `${Math.round(w)} + ${Math.round(w)}`; };
+  const sweet=d=>{ const f=DATA[d].water*0.4; return `${Math.round(f*0.42)} + ${Math.round(f*0.58)}`; };
+  const back=d=>`${Math.round(DATA[d].water*0.2)} × 3`;
+  const rows=[
+    ["狀態",d=>shortStatus[d]],
+    ["K Ultra 刻度",d=>`${DATA[d].grind}（${DATA[d].range}）`],
+    ["刀盤間距",d=>DATA[d].gap],
+    ["粉床深度比",d=>DATA[d].depth],
+    ["總水量",d=>`${DATA[d].water} g`],
+    ["前兩注（平衡）",d=>bal(d)],
+    ["前兩注（偏甜）",d=>sweet(d)],
+    ["後三注",d=>back(d)],
+    ["注水間隔",d=>`${DATA[d].interval} 秒`],
+    ["預期總時間",d=>DATA[d].total],
+    ["預期吸水量",d=>DATA[d].absorb],
+    ["預期出液",d=>DATA[d].out],
+  ];
+  rows.forEach(([label,fn])=>{
+    const tr=document.createElement("tr");
+    const th=document.createElement("td"); th.textContent=label; tr.appendChild(th);
+    doses.forEach(d=>{ const td=document.createElement("td"); td.textContent=fn(d); tr.appendChild(td); });
+    body.appendChild(tr);
+  });
+}
+
+function highlight(i){ document.querySelectorAll("#rows tr").forEach(r=>r.classList.toggle("active", +r.dataset.i===i)); }
+
+function tickAuto(p,d,quiet){
+  const c=p.filter(x=>x.start<=elapsed).pop(), nxt=p.find(x=>x.start>elapsed);
+  highlight(c.i);
+  if(!quiet && c.i>lastBeep){ lastBeep=c.i; if(c.i>1) beep(); }
+  $("next").innerHTML = nxt
+    ? `現在：第 ${c.i} 注，注到 <b>${c.cum} g</b><br>第 ${nxt.i} 注倒數 ${Math.ceil(nxt.start-elapsed)} 秒（目標 ${nxt.cum} g）`
+    : `最後一注：注到 <b>${c.cum} g</b>，等待滴濾完成（${d.total}）`;
+}
+
+function tickManual(p,quiet){
+  if(!quiet && due!==null && elapsed>=due){ cur++; starts[cur]=elapsed; due=null; beep(); renderLog(); }
+  const c=p[cur-1];
+  highlight(cur);
+  const btn=$("markBtn");
+  if(due!==null){
+    const n=p[cur];
+    $("next").innerHTML=`第 ${cur} 注拐點已記錄（注後 ${Math.round(inflect[cur]-starts[cur])} 秒）<br>倒數 <b>${Math.ceil(due-elapsed)}</b> 秒後注第 ${n.i} 注，目標 ${n.cum} g`;
+    btn.textContent="立即注水";
+  } else if(cur<5){
+    $("next").innerHTML=`第 ${cur} 注：注到 <b>${c.cum} g</b>（已過 ${Math.floor(elapsed-starts[cur])} 秒）<br>流速明顯變慢時按「標記拐點」`;
+    btn.textContent="標記拐點";
+  } else {
+    $("next").innerHTML=`最後一注：注到 <b>${c.cum} g</b><br>滴濾結束時按「滴濾結束」`;
+    btn.textContent="滴濾結束";
+  }
+}
+
+function tick(quiet){
+  if(!quiet && running) elapsed=(performance.now()-t0)/1000;
+  const d=DATA[dose], p=pours();
+  $("clock").textContent=fmt(elapsed);
+  if(mode==="auto") tickAuto(p,d,quiet); else tickManual(p,quiet);
+  const now=$("now"); now.style.display="block"; now.style.left=Math.min(100,elapsed/d.totalSec*100)+"%";
+  if(!quiet){
+    saveSession(false);
+    if(window.afterTick) afterTick();
+  } else if(window.afterTick) afterTick();
+}
+
+function stopTimer(){ clearInterval(timerId); timerId=null; running=false; }
+
+function reset(clear){
+  stopTimer(); elapsed=0; cur=1; starts=[]; inflect=[]; due=null; endTime=null; lastBeep=0; lastAnnounced="";
+  $("clock").textContent="0:00"; $("startBtn").textContent="開始"; $("startBtn").disabled=false;
+  $("next").textContent="按「開始」後，第 1 注立即開始";
+  $("now").style.display="none"; $("markBtn").disabled=true; $("markBtn").textContent="標記拐點";
+  $("logBox").style.display="none"; $("copyMsg").textContent="";
+  $("copyFallback").hidden=true; $("copyManualBtn").hidden=true;
+  if(clear!==false) clearSession();
+  highlight(0);
+  lockPickers();
+  if(window.afterReset) afterReset();
+}
+
+function renderLog(){
+  if(mode!=="manual") return;
+  const d=DATA[dose], p=pours();
+  $("logBox").style.display="block";
+  const tb=$("logRows"); tb.textContent="";
+  p.forEach(x=>{
+    const i=x.i, s=starts[i], f=inflect[i], nextS=starts[i+1] ?? (i===5?endTime:null);
+    const tr=document.createElement("tr");
+    [`第 ${i} 注（${x.vol} g）`,fmt(x.start),s!=null?fmt(s):"—",f!=null?Math.round(f-s)+" 秒":"—",(s!=null&&nextS!=null)?Math.round(nextS-s)+" 秒":"—"].forEach(t=>{
+      const td=document.createElement("td"); td.textContent=t; tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  const offs=[1,2,3,4].filter(i=>inflect[i]!=null).map(i=>inflect[i]-starts[i]);
+  let txt="";
+  if(offs.length){
+    const avg=offs.reduce((a,b)=>a+b,0)/offs.length;
+    const [lo,hi]=d.inflect;
+    const judge = avg<lo ? "比預估早，粉床排水偏快，可考慮調細 1 click" : avg>hi ? "比預估晚，粉床排水偏慢，可考慮調粗 1 click" : "落在預估範圍內";
+    txt+=`平均拐點：注後 <b>${Math.round(avg)} 秒</b>（預估 ${lo}–${hi} 秒，${judge}）。建議固定間隔：<b>${Math.round(avg+lead())} 秒</b>。`;
+  }
+  if(endTime!=null) txt+=`<br>總時間：<b>${fmt(endTime)}</b>（預期 ${d.total}）。`;
+  $("summary").innerHTML=txt;
+}
+
+const ABS=[2.39,2.49];
+function calcRatio(){
+  const d=DATA[dose], m=+$("inDose").value, w=+$("inWater").value, o=+$("inOut").value;
+  const bad=v=>!(isFinite(v)&&v>0);
+  const r={};
+  if(!bad(m)&&!bad(w)) r.inR=w/m;
+  if(!bad(m)&&!bad(o)) r.outR=o/m;
+  if(!bad(m)&&!bad(w)&&!bad(o)&&w>o){ r.abs=w-o; r.rate=(w-o)/m; }
+  $("rIn").textContent = r.inR ? "1:"+r.inR.toFixed(1) : "—";
+  $("rOut").textContent= r.outR? "1:"+r.outR.toFixed(1) : "—";
+  $("rAbs").textContent= r.abs ? r.abs.toFixed(1)+" g" : "—";
+  $("rRate").textContent=r.rate? r.rate.toFixed(2)+" g/g" : "—";
+  const sum=$("ratioJudge"); sum.textContent="";
+  if(!r.rate){
+    if((!bad(m)||!bad(w)||!bad(o)) && ($("inDose").value!==""||$("inWater").value!==""||$("inOut").value!=="")) sum.textContent="輸入不完整或不正確：粉量、水量、出液須為正數，且總水量須大於出液。";
+    else sum.textContent="輸入出液重量後自動計算。";
+    return r;
+  }
+  const [lo,hi]=d.ratio, out=+r.outR.toFixed(1), rate=+r.rate.toFixed(2);
+  const j1 = out<lo ? `<span class="bad">出杯比 1:${out} 低於錨點 1:${lo}–${hi}，粉床保留較多水</span>`
+           : out>hi ? `<span class="bad">出杯比 1:${out} 高於錨點 1:${lo}–${hi}，粉床保水較少</span>`
+           : `<span class="good">出杯比 1:${out} 落在錨點 1:${lo}–${hi}</span>`;
+  const j2 = rate>ABS[1]+0.05 ? `<span class="bad">吸水率 ${rate} 偏高：研磨可能偏細、細粉堵塞，或滴濾未完全結束</span>`
+           : rate<ABS[0]-0.05 ? `<span class="bad">吸水率 ${rate} 偏低：研磨可能偏粗，粉床保水能力下降</span>`
+           : `<span class="good">吸水率 ${rate} 落在 K Ultra 錨點 ${ABS[0]}–${ABS[1]} g/g 附近</span>`;
+  const note = dose===20 ? "" : "<br>註：30g／40g 的吸水率錨點沿用 20g 實測值，首次實測結果即可作為新錨點。";
+  $("ratioJudge").innerHTML=j1+"<br>"+j2+note;
+  return r;
+}
+
+/* 輸入監聽已在下方統一綁定（含 saveSession） */
+
+function toMarkdown(){
+  const d=DATA[dose], p=pours(), dt=new Date();
+  const date=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
+  const lines=[`## 四六法拐點紀錄 ${date}`,
+    `- 粉量 ${dose}g／K Ultra ${d.grind}／總水 ${d.water}g／前段 ${taste==="sweet"?"偏甜":"平衡"}／延遲 ${lead()} 秒`,"",
+    "| 注次 | 水量 | 計畫開始 | 實際開始 | 拐點（注後） | 本注時長 |","|---|---|---|---|---|---|"];
+  p.forEach(x=>{
+    const i=x.i, s=starts[i], f=inflect[i], n=starts[i+1] ?? (i===5?endTime:null);
+    lines.push(`| ${i} | ${x.vol}g | ${fmt(x.start)} | ${s!=null?fmt(s):"-"} | ${f!=null?Math.round(f-s)+"s":"-"} | ${(s!=null&&n!=null)?Math.round(n-s)+"s":"-"} |`);
+  });
+  const offs=[1,2,3,4].filter(i=>inflect[i]!=null).map(i=>inflect[i]-starts[i]);
+  lines.push("");
+  if(offs.length) lines.push(`- 平均拐點：${Math.round(offs.reduce((a,b)=>a+b,0)/offs.length)} 秒（預估 ${d.inflect[0]}–${d.inflect[1]} 秒）`);
+  if(endTime!=null) lines.push(`- 總時間：${fmt(endTime)}（預期 ${d.total}）`);
+  const r=calcRatio();
+  lines.push(`- 實際粉量 ${$("inDose").value||"-"}g／總注水 ${$("inWater").value||"-"}g／出液 ${$("inOut").value||"＿＿"}g`);
+  if(r.inR) lines.push(`- 入水比 1:${r.inR.toFixed(1)}${r.outR?`／出杯比 1:${r.outR.toFixed(1)}`:""}${r.rate?`／吸水率 ${r.rate.toFixed(2)} g/g`:""}`);
+  lines.push(`- 風味：${$("inTaste").value||"＿＿"}`);
+  return lines.join("\n");
+}
+
+$("startBtn").onclick=()=>{
+  unlockAudio();
+  if(running){ stopTimer(); $("startBtn").textContent="繼續"; saveSession(true); syncBrew(); return; }
+  if(endTime!=null) return;
+  if(elapsed===0){ starts[1]=0; beep(); }
+  t0=performance.now()-elapsed*1000; timerId=setInterval(()=>tick(false),250); running=true; tick(false);
+  $("startBtn").textContent="暫停"; $("markBtn").disabled=false;
+  lockPickers(); saveSession(true);
+};
+$("resetBtn").onclick=()=>{ reset(); syncBrew(); };
+$("markBtn").onclick=()=>{
+  if(!running) return;
+  if(due!==null){ due=elapsed; tick(false); saveSession(true); return; }
+  if(cur<5){ inflect[cur]=elapsed; due=elapsed+lead(); renderLog(); tick(false); saveSession(true); }
+  else { endTime=elapsed; stopTimer(); $("markBtn").disabled=true; $("startBtn").disabled=true;
+         $("next").innerHTML=`完成，總時間 <b>${fmt(endTime)}</b>`; renderLog(); saveSession(true); }
+};
+$("copyBtn").onclick=async()=>{
+  const t=toMarkdown();
+  $("copyFallback").hidden=true; $("copyManualBtn").hidden=true;
+  try{
+    await navigator.clipboard.writeText(t);
+    $("copyMsg").textContent="已複製";
+  }
+  catch(e){
+    $("copyArea").value=t; $("copyFallback").hidden=false; $("copyManualBtn").hidden=false;
+    $("copyArea").select();
+    $("copyMsg").textContent="自動複製失敗，請手動複製";
+  }
+};
+$("copyManualBtn").onclick=async()=>{
+  $("copyArea").select();
+  try{ await navigator.clipboard.writeText($("copyArea").value); $("copyMsg").textContent="已複製"; }
+  catch(e){ document.execCommand&&document.execCommand("copy"); $("copyMsg").textContent="請按 Ctrl+C 複製"; }
+};
+document.querySelectorAll("[data-dose]").forEach(b=>b.onclick=()=>{
+  const v=+b.dataset.dose;
+  if(v!==dose && !confirmSwitch()) return;
+  dose=v; syncPickers(); render(); saveSession(true);
+});
+document.querySelectorAll("[data-taste]").forEach(b=>b.onclick=()=>{
+  const v=b.dataset.taste;
+  if(v!==taste && !confirmSwitch()) return;
+  taste=v; syncPickers(); render(); saveSession(true);
+});
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{
+  const v=b.dataset.mode;
+  if(v!==mode && !confirmSwitch()) return;
+  mode=v; syncPickers(); render(); saveSession(true);
+});
+["inDose","inWater","inOut"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{ calcRatio(); saveSession(false); }));
+$("inTaste").addEventListener("input",()=>saveSession(false));
+const pendingSession=loadSession();
+syncPickers();
+render({clear:false});
+if(pendingSession){
+  const s=pendingSession;
+  const dt=new Date(s.savedAt);
+  const when=`${String(dt.getMonth()+1).padStart(2,"0")}/${String(dt.getDate()).padStart(2,"0")} ${String(dt.getHours()).padStart(2,"0")}:${String(dt.getMinutes()).padStart(2,"0")}`;
+  $("resumeText").textContent=`偵測到 ${when} 未完成的沖煮（${s.dose}g，第 ${s.cur} 注，已過 ${fmt(s.elapsed)}），要還原嗎？`;
+  $("resumeBar").hidden=false;
+  $("resumeKeep").onclick=()=>{ $("resumeBar").hidden=true; stopTimer(); running=false; applySession(s); };
+  $("resumeDrop").onclick=()=>{ $("resumeBar").hidden=true; clearSession(); };
+}
+
+// ===== 沖煮模式、計時器置頂、螢幕常亮 =====
+var wake=null;
+function setWake(t){ $("wakeMsg").textContent=t; $("bWake").textContent=t; }
+async function requestWake(){
+  if(!("wakeLock" in navigator)){ setWake("此瀏覽器不支援螢幕常亮，請暫時延長手機的螢幕逾時"); return; }
+  try{
+    wake=await navigator.wakeLock.request("screen");
+    setWake("螢幕常亮：已啟用");
+    wake.addEventListener("release",()=>{ wake=null; if(!running) setWake("螢幕常亮：未啟用"); });
+  }catch(e){ setWake("螢幕常亮啟用失敗（"+e.name+"），請暫時延長螢幕逾時"); }
+}
+function releaseWake(){ if(wake){ wake.release(); wake=null; } setWake("螢幕常亮：未啟用（按「開始」後自動啟用）"); }
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible" && running){
+    elapsed=(performance.now()-t0)/1000; tick(false);
+    if(!wake) requestWake();
+  }
+});
+
+function announceBrew(v){
+  const key=`${v.pour}-${v.sub}`;
+  if(key===lastAnnounced) return;
+  lastAnnounced=key;
+  $("bSub").textContent=v.sub;
+}
+function brewView(p){
+  if(elapsed===0 && !running) return {pour:1, target:p[0].cum, sub:"按「開始」後，第 1 注立即開始"};
+  if(mode==="auto"){
+    const c=p.filter(x=>x.start<=elapsed).pop(), n=p.find(x=>x.start>elapsed);
+    return {pour:c.i, target:c.cum, sub:n?`第 ${n.i} 注倒數 ${Math.ceil(n.start-elapsed)} 秒`:"最後一注，等待滴濾完成"};
+  }
+  if(endTime!=null) return {pour:5, target:p[4].cum, sub:`完成，總時間 ${fmt(endTime)}`};
+  if(due!==null){ const n=p[cur]; return {pour:n.i, target:n.cum, sub:`倒數 ${Math.ceil(due-elapsed)} 秒後注水`, pending:true}; }
+  return {pour:cur, target:p[cur-1].cum,
+    sub: cur<5 ? `已過 ${Math.floor(elapsed-starts[cur])} 秒｜流速變慢時按下方按鈕` : "滴濾結束時按下方按鈕"};
+}
+function syncBrew(){
+  const p=pours(), v=brewView(p), d=DATA[dose];
+  $("bClock").textContent=$("clock").textContent;
+  const front=v.pour<=2;
+  $("bPour").innerHTML=`第 ${v.pour} 注<small><span class="b-phase${front?" f":""}"></span>${front?"前 40%":"後 60%"}｜本注 ${p[v.pour-1].vol} g</small>`;
+  $("bTarget").textContent=v.target;
+  $("bTarget").parentElement.classList.toggle("f",front);
+  const sub=$("bSub"); announceBrew(v); sub.classList.toggle("pending",!!v.pending);
+  $("bInfo").textContent=`${dose}g｜K Ultra ${d.grind}｜${mode==="manual"?"拐點觸發":"固定間隔"}`;
+  $("bStart").textContent=$("startBtn").textContent; $("bStart").disabled=$("startBtn").disabled;
+  const m=$("bMark"); m.hidden = mode!=="manual"; m.textContent=$("markBtn").textContent; m.disabled=$("markBtn").disabled;
+  $("mainTimer").classList.toggle("sticky", running || elapsed>0);
+}
+window.afterTick=syncBrew;
+window.afterReset=()=>{ releaseWake(); syncBrew(); };
+
+$("startBtn").addEventListener("click",()=>{ if(running) requestWake(); syncBrew(); });
+$("markBtn").addEventListener("click",()=>{ if(endTime!=null) releaseWake(); syncBrew(); });
+$("bStart").onclick=()=>$("startBtn").click();
+$("bMark").onclick=()=>$("markBtn").click();
+function openBrew(){
+  lastFocus=document.activeElement;
+  syncBrew(); $("brew").hidden=false; document.body.classList.add("brewing");
+  $("bExit").focus();
+}
+function closeBrew(){
+  $("brew").hidden=true; document.body.classList.remove("brewing");
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+$("brewBtn").onclick=openBrew;
+$("bExit").onclick=closeBrew;
+document.addEventListener("keydown",e=>{
+  if($("brew").hidden) return;
+  if(e.key==="Escape"){ closeBrew(); }
+  if(e.key===" " && (e.target===$("bMark")||e.target===$("bStart"))){ e.preventDefault(); e.target.click(); }
+  if(e.key==="Tab"){
+    const f=$("brew").querySelectorAll("button");
+    const list=[...f].filter(b=>!b.disabled && !b.hidden);
+    if(!list.length) return;
+    const first=list[0], last=list[list.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+});
+function syncSoundUI(){
+  $("soundTgl").checked=soundOn; $("vibTgl").checked=vibrateOn;
+}
+$("soundTgl").addEventListener("change",e=>{ soundOn=e.target.checked; if(soundOn) unlockAudio(); saveSession(true); });
+$("vibTgl").addEventListener("change",e=>{ vibrateOn=e.target.checked; saveSession(true); });
+$("bFsUp").onclick=()=>$("fsUp").click();
+$("bFsDown").onclick=()=>$("fsDown").click();
+syncBrew();
+
+// ===== 字體大小控制 =====
+(function(){
+  const SIZES=[14,16,18,20,22,24,26,28];
+  let idx;
+  try{ const v=+localStorage.getItem("fs46"); idx=SIZES.indexOf(v); }catch(e){ idx=-1; }
+  if(idx<0) idx = window.matchMedia("(max-width:480px)").matches ? 3 : 1; // 手機預設 20px
+  const up=document.getElementById("fsUp"), down=document.getElementById("fsDown"), val=document.getElementById("fsVal");
+  function apply(){
+    document.documentElement.style.fontSize=SIZES[idx]+"px";
+    val.textContent=Math.round(SIZES[idx]/16*100)+"%";
+    up.disabled = idx===SIZES.length-1; down.disabled = idx===0;
+    try{ localStorage.setItem("fs46",SIZES[idx]); }catch(e){}
+  }
+  up.onclick=()=>{ if(idx<SIZES.length-1){idx++; apply();} };
+  down.onclick=()=>{ if(idx>0){idx--; apply();} };
+  apply();
+})();
+</script>
+
+</body>
+</html>
